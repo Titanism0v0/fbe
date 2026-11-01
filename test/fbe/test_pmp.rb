@@ -194,8 +194,6 @@ class TestPmp < Fbe::Test
   end
 
   def test_areas_merges_defaults_and_pmp_facts_without_duplicates
-    $options = Judges::Options.new
-    $loog = Loog::NULL
     fb = Factbase.new
     %w[custom custom hr].each do |area|
       f = fb.insert
@@ -204,7 +202,7 @@ class TestPmp < Fbe::Test
     end
     fb.insert.area = 'unrelated'
     fb.insert.what = 'pmp'
-    areas = Fbe.pmp(fb:, global: {}).areas
+    areas = Fbe.pmp(fb:, global: {}, options: Judges::Options.new, loog: Loog::NULL).areas
     assert_equal(1, areas.count('custom'))
     assert_equal(1, areas.count('hr'))
     refute_includes(areas, 'unrelated')
